@@ -13,4 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@home');
+Route::get('/', 'HomeController@home')->name('searcher');
+Route::get('/summoner/{name}', 'HomeController@getSummonerInfo')->name('summInfo');
+
+
+Route::get('/getChampions', 'ImporterController@getChampions');
