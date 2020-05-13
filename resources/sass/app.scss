@@ -1,29 +1,6 @@
 // Materialize
 @import '~materialize-css/dist/css/materialize.min.css';
 
-
-// .profileIconDiv {
-//     .profileIcon {
-//         position: relative;
-//         width: 125px;
-//         height: 125px;
-//         display:block;
-//         margin:auto;
-//     }
-//     .level {
-//         position: absolute;
-//         background-color: rgba(24, 23, 23, 0.781);
-//         // left: 70px;
-//         // bottom: 73px;
-//         border-radius: 30%;
-//         color: goldenrod;
-//         font-weight: bold;
-//         z-index: 2;
-//         left: 50%;
-//         transform: translate(-50%);
-
-//     }
-// }
 .profile{
     width: 50%;
     margin: 0 auto;
@@ -41,12 +18,14 @@
         .level {
             position: absolute;
             background-color: rgba(24, 23, 23, 0.781);
-            border-radius: 30%;
-            color: goldenrod;
+            border-radius: 20%;
+            color: white;
             font-weight: bold;
             left: 50%;
             bottom: 0;
             transform: translate(-50%);
+            padding-left: 2px;
+            padding-right: 2px;
         }
     }
 }

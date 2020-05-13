@@ -18,7 +18,6 @@ class HomeController extends Controller
     }
 
     public function getSummonerInfo($name) {
-
         $client = new \GuzzleHttp\Client();
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'.$name.'?api_key='.$this->key);
         $summInfo    = json_decode($summRequest->getBody()->getContents());
@@ -28,9 +27,16 @@ class HomeController extends Controller
 
         $profileIcon = $this->checkIfIconExist($summInfo->profileIconId);
 
+        $soloqWinRatio = round(($leagueInfo[0]->wins / ($leagueInfo[0]->wins + $leagueInfo[0]->losses)) * 100);
+        $flexWinRatio  = round(($leagueInfo[1]->wins / ($leagueInfo[1]->wins + $leagueInfo[1]->losses)) * 100);
+
         return view('summoner', [
-            'summInfo' => $summInfo,
-            'profileIcon' => $profileIcon
+            'summInfo'    => $summInfo,
+            'profileIcon' => $profileIcon,
+            'soloq'       => $leagueInfo[0],
+            'flex'        => $leagueInfo[1],
+            'soloqWinRatio' => $soloqWinRatio,
+            'flexWinRatio' => $flexWinRatio
         ]);
     }
 

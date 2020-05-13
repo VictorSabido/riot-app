@@ -23,23 +23,10 @@
 <div class="section no-pad-bot" id="app">
     <div class="container">
         <div class="row">
-            {{-- <div class="col s12 m4 l4">
-                <div class="card blue-grey lighten-5">
-                    <div class="card-content black-text">
-                        <span class="card-title center"><strong>{{ $summInfo->name }} | Solo - Duo</strong></span>
-                        <div class="profileIconDiv">
-                            <span class="level">150</span>
-                            <img src="{{ asset('storage/'.$profileIcon) }}" alt="Profile Icon" class="profileIcon">
-                        </div>
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                            I am convenient because I require little markup to use effectively.</p>
-                    </div>
-                </div>
-            </div> --}}
             <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
                     <div class="card-content black-text">
-                        <span class="card-title center"><strong>{{ $summInfo->name }} | Solo - Duo</strong></span>
+                        <span class="card-title center"><strong>{{ $summInfo->name }}</strong></span>
                         <div class="profile">
                             <div class="profileIconDiv">
                                 <span class="level">150</span>
@@ -48,6 +35,40 @@
                         </div>
                         <p>I am a very simple card. I am good at containing small bits of information.
                             I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4 l4">
+                <div class="card blue-grey lighten-5">
+                    <div class="card-content black-text">
+                        <span class="card-title center"><strong>Ranked Solo</strong></span>
+                        <div class="profile">
+                            <div class="profileIconDiv">
+                                <span class="level">{{ $soloq->rank }}</span>
+                                <img src="{{ asset('images/leagues/'.$soloq->tier.'_'.$soloq->rank.'.png') }}" alt="Profile Icon" class="profileIcon">
+                            </div>
+                        </div>
+                        <p>{{ $soloq->leaguePoints }} LPs</p>
+                        <p>W {{ $soloq->wins }} / L {{ $soloq->losses }}</p>
+                        <p>WinRate {{ $soloqWinRatio }}%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4 l4">
+                <div class="card blue-grey lighten-5">
+                    <div class="card-content black-text">
+                        <span class="card-title center"><strong>Ranked Solo</strong></span>
+                        <div class="profile">
+                            <div class="profileIconDiv">
+                                <span class="level">{{ $flex->rank }}</span>
+                                <img src="{{ asset('images/leagues/'.$flex->tier.'_'.$flex->rank.'.png') }}" alt="Profile Icon" class="profileIcon">
+                            </div>
+                        </div>
+                        <div>
+                            <p>{{ $flex->leaguePoints }} LPs</p>
+                            <p>W {{ $flex->wins }} / L {{ $flex->losses }}</p>
+                            <p>WinRate {{ $flexWinRatio }}%</p>
+                        </div>
                     </div>
                 </div>
             </div>
