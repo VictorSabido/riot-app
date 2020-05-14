@@ -57,7 +57,7 @@
             <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
                     <div class="card-content black-text">
-                        <span class="card-title center"><strong>Ranked Solo</strong></span>
+                        <span class="card-title center"><strong>Ranked Flex</strong></span>
                         <div class="profile">
                             <div class="profileIconDiv">
                                 <span class="level">{{ $flex->rank }}</span>
@@ -115,9 +115,8 @@
     </div>
 </footer>
 
-
   <!--  Scripts-->
-  <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/summoner.js') }}"></script>
 
   </body>
 </html>
