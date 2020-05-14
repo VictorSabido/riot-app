@@ -9,10 +9,25 @@ new Vue({
     methods: {
         sendSummoner: function() {
             this.summoner = document.getElementById('summoner').value; // Google autocomplete
-            window.location.href = '/summoner/' + this.summoner;
+            if(this.summoner == '') {
+                this.showAlert()
+            } else {
+                window.location.href = '/summoner/' + this.summoner;
+            }
         },
         focusInput: function() {
             this.$refs.summoner.focus(); // Focus input when click arround section
+        },
+        showAlert: function() {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Summoner name missing',
+                icon: 'error',
+                confirmButtonText: 'Okey'
+            })
         }
     },
+    mounted() {
+        
+    }
 })
