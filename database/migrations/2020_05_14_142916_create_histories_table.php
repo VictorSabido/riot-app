@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChampionsTable extends Migration
+class CreateHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateChampionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('champions', function (Blueprint $table) {
-            $table->bigInteger('key')->primary()->unsigned();
-            $table->string('id');
+        Schema::create('histories', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('summoner_id')->unsigned();
+            $table->foreign('summoner_id')->references('id')->on('summoners');
             $table->string('name');
-            $table->string('image');
-            $table->string('version');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateChampionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('champions');
+        Schema::dropIfExists('histories');
     }
 }
