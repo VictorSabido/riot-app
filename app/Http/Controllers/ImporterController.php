@@ -14,16 +14,17 @@ class ImporterController extends Controller
 
         if($championRequest->getStatusCode() == 200){
             $champions = json_decode($championRequest->getBody()->getContents())->data;
+            //dd($champions);
             foreach($champions as $champion)
             {
                 Champion::updateOrCreate(
-                    ['champ_id' => $champion->id],
+                    ['key' => $champion->key],
                     [
-                        'champ_id' => $champion->id,
-                        'key'      => $champion->key,
-                        'name'     => $champion->name,
-                        'image'    => $champion->image->full,
-                        'version'  => $champion->version
+                        'key'     => $champion->key,
+                        'id'      => $champion->id,
+                        'name'    => $champion->name,
+                        'image'   => $champion->image->full,
+                        'version' => $champion->version
                     ]
                 );
             }
