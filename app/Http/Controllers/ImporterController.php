@@ -14,7 +14,6 @@ class ImporterController extends Controller
 
         if($championRequest->getStatusCode() == 200){
             $champions = json_decode($championRequest->getBody()->getContents())->data;
-            //dd($champions);
             foreach($champions as $champion)
             {
                 Champion::updateOrCreate(
