@@ -25,40 +25,39 @@ class HomeController extends Controller
     }
 
     public function getSummonerInfo($name) {
+        $this->checkSummonerDatabase($name);
 
-        // $this->checkSummonerDatabase($name);
-
-        
         // TO DO
-        $client = new \GuzzleHttp\Client();
-        $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/xWDXKRmzpMvym8Rg2HA17wVv6u5HFsbI4fhv-tVtx3HS7Q?api_key='.$this->key);
-        $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
+        // $client = new \GuzzleHttp\Client();
+        // $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/xWDXKRmzpMvym8Rg2HA17wVv6u5HFsbI4fhv-tVtx3HS7Q?api_key='.$this->key);
+        // $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
 
-        $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/timelines/by-match/4601444482?api_key='.$this->key);
-        $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
-        dd($leagueInfo);
+        // $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matches/4601444482?api_key='.$this->key);
+        // $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
+        // dd($leagueInfo);
 
-        // $flexWinRatio  = round(($leagueInfo[0]->wins / ($leagueInfo[0]->wins + $leagueInfo[0]->losses)) * 100);
-        // $soloqWinRatio = round(($leagueInfo[1]->wins / ($leagueInfo[1]->wins + $leagueInfo[1]->losses)) * 100);
-        
-        // $profileIcon = $this->checkIfIconExist($summInfo->profileIconId);
+        $summoner = Summoner::with('leagues')->where('name',  $name)->first();
+
+        $order = ['RANKED_FLEX_SR', 'RANKED_SOLO_5x5'];
+        $summoner->leagues = $summoner->leagues->sort(function ($a, $b) use ($order) {
+            $pos_a = array_search($a->queueType, $order);
+            $pos_b = array_search($b->queueType, $order);
+            return $pos_a - $pos_b;
+          });
+
+        $this->checkIconId($summoner->profileIconId);
 
         return view('summoner', [
-            'summInfo'      => $summInfo,
-            'profileIcon'   => $profileIcon,
-            'flex'          => $leagueInfo[0],
-            'soloq'         => $leagueInfo[1],
-            'soloqWinRatio' => $soloqWinRatio,
-            'flexWinRatio'  => $flexWinRatio
+            'summ' => $summoner,
         ]);
     }
 
-    public function checkIfIconExist($imgName) {
+    private function checkIconId($imgName) {
         $folder = 'profile_icons';
         $check = Storage::disk('public')->exists($folder.'/'.$imgName.'.png');
 
         if(!$check) {
-            $url = 'http://ddragon.leagueoflegends.com/cdn/10.9.1/img/profileicon/'.$imgName.'.png';
+            $url = 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/profileicon/'.$imgName.'.png';
             $contents = file_get_contents($url);
             $name = substr($url, strrpos($url, '/') + 1);
             Storage::disk('public')->put($folder.'/'.$name, $contents);
@@ -68,13 +67,11 @@ class HomeController extends Controller
         return $imgName;
     }
 
-    public function checkSummonerDatabase($name) {
+    private function checkSummonerDatabase($name) {
         $summoner = Summoner::where('name', $name)->first();
         if($summoner == null) {
             $this->getSummoner($name);
         }
-        
-        $this->getSummoner($name);
     }
 
 
@@ -83,7 +80,7 @@ class HomeController extends Controller
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'.$name.'?api_key='.$this->key, $this->guzzOptions);
 
         if($summRequest->getStatusCode() != 200) {
-            abort(404);
+            throw new \Exception('Error Processing Request. '.$summRequest->getReasonPhrase().', code: '. $summRequest->getStatusCode(), 1);
         }
 
         $summRequest = json_decode($summRequest->getBody()->getContents());

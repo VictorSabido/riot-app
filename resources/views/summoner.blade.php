@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
     <title>Starter Template - Materialize</title>
     <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
@@ -26,19 +28,30 @@
             <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
                     <div class="card-content black-text">
-                        <span class="card-title center"><strong>{{ $summInfo->name }}</strong></span>
-                        <div class="profile">
+                        <span class="card-title center"><strong>{{ $summ->name }}</strong></span>
+                        <div class="center profile">
                             <div class="profileIconDiv">
                                 <span class="level">150</span>
-                                <img src="{{ asset('storage/'.$profileIcon) }}" alt="Profile Icon" class="profileIcon">
+                                <img src="{{ asset('storage/profile_icons/'.$summ->profileIconId.'.png') }}" alt="Profile Icon" class="profileIcon">
                             </div>
                         </div>
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                            I am convenient because I require little markup to use effectively.</p>
+                        <a class="waves-effect waves-light btn"><i class="material-icons right">cloud</i>button</a>
+
                     </div>
                 </div>
             </div>
-            <div class="col s12 m4 l4">
+            @foreach ($summ->leagues as $league)
+            {{-- {{ dd($league) }} --}}
+                <top-card
+                    col="s12 m4 l4"
+                    league="{{ $league->queueType }}"
+                    level="{{ $league->rank }}"
+                    image="{{ asset('images/leagues/'.$league->tier.'_'.$league->rank.'.png') }}"
+                    league-points="{{ $league->leaguePoints }}"
+                ></top-card>
+            @endforeach
+
+            {{-- <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
                     <div class="card-content black-text">
                         <span class="card-title center"><strong>Ranked Solo</strong></span>
@@ -71,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
