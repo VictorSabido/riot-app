@@ -26652,8 +26652,7 @@ new Vue({
         confirmButtonText: 'Okey'
       });
     }
-  },
-  mounted: function mounted() {}
+  }
 });
 
 /***/ }),

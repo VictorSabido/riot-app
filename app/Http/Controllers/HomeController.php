@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Summoner;
 use App\Models\History;
@@ -24,26 +23,22 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function updateSummoner($name) {
+        $this->getSummoner($name);
+        return redirect()->back();
+    }
+
     public function getSummonerInfo($name) {
         $this->checkSummonerDatabase($name);
 
-        // TO DO
-        // $client = new \GuzzleHttp\Client();
-        // $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/xWDXKRmzpMvym8Rg2HA17wVv6u5HFsbI4fhv-tVtx3HS7Q?api_key='.$this->key);
-        // $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
-
-        // $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matches/4601444482?api_key='.$this->key);
-        // $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
-        // dd($leagueInfo);
-
-        $summoner = Summoner::with('leagues')->where('name',  $name)->first();
+        $summoner = Summoner::with(['leagues', 'getMasteries'])->where('name',  $name)->first();
 
         $order = ['RANKED_FLEX_SR', 'RANKED_SOLO_5x5'];
         $summoner->leagues = $summoner->leagues->sort(function ($a, $b) use ($order) {
             $pos_a = array_search($a->queueType, $order);
             $pos_b = array_search($b->queueType, $order);
             return $pos_a - $pos_b;
-          });
+        });
 
         $this->checkIconId($summoner->profileIconId);
 
@@ -80,7 +75,7 @@ class HomeController extends Controller
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'.$name.'?api_key='.$this->key, $this->guzzOptions);
 
         if($summRequest->getStatusCode() != 200) {
-            throw new \Exception('Error Processing Request. '.$summRequest->getReasonPhrase().', code: '. $summRequest->getStatusCode(), 1);
+            throw new \Exception('Error Processing Request API RIOT. '.$summRequest->getReasonPhrase().', code: '. $summRequest->getStatusCode(), 1);
         }
 
         $summRequest = json_decode($summRequest->getBody()->getContents());
@@ -174,6 +169,7 @@ class HomeController extends Controller
         $champions = Champion::first();
         if($champions == null) {
             app('App\Http\Controllers\ImporterController')->getChampions();
+            app('App\Http\Controllers\ImporterController')->getChampionsImage();
         }
     }
 }

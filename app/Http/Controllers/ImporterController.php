@@ -20,7 +20,7 @@ class ImporterController extends Controller
                     ['key' => $champion->key],
                     [
                         'key'     => $champion->key,
-                        'id'      => $champion->id,
+                        'id_name'      => $champion->id,
                         'name'    => $champion->name,
                         'image'   => $champion->image->full,
                         'version' => $champion->version
@@ -37,7 +37,6 @@ class ImporterController extends Controller
 
 
     public function getChampionsImage() {
-
         $champions = Champion::get();
         $url = 'http://ddragon.leagueoflegends.com/cdn/10.10.3216176/img/champion/';
         $folder = 'champions';

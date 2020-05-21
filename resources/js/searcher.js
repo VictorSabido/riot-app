@@ -26,8 +26,5 @@ new Vue({
                 confirmButtonText: 'Okey'
             })
         }
-    },
-    mounted() {
-        
     }
 })

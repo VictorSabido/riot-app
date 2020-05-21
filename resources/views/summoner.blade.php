@@ -25,8 +25,11 @@
         <div class="row">
             <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
-                    <div class="refresh">
-                        <a class="btn-floating button-refresh purple lighten-1"><i class="material-icons">refresh</i></a>
+                    <div class="refresh" @click="updateSummoner">
+                        <form id="updateSummoner" action="{{ route('summUpdate', $summ->name) }}" method="post">
+                            @csrf
+                            <a class="btn-floating button-refresh purple lighten-1 noselect"><i class="material-icons">refresh</i></a>
+                        </form>
                     </div>
                     <div class="card-content black-text">
                         <span class="card-title center"><strong>{{ $summ->name }}</strong></span>
@@ -36,8 +39,10 @@
                                 <img src="{{ asset('storage/profile_icons/'.$summ->profileIconId.'.png') }}" alt="Profile Icon" class="profileIcon">
                             </div>
                         </div>
-                        <div class="masteries">
-                            masteries
+                        <div class="masteries center">
+                            @for ($i = 0; $i < 6; $i++)
+                                <img src="{{ asset('storage/champions/'.$summ->masteries[$i]->getChampionImage()) }}" alt="" height="30px">
+                            @endfor
                         </div>
                     </div>
                 </div>

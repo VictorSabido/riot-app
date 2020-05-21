@@ -24,9 +24,6 @@
             league: Object,
             image: String
         },
-        mounted() {
-            console.log(this.league)
-        },
         computed: {
             leagueName: function() {
                 let solo = 'Solitario'

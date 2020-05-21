@@ -15,7 +15,7 @@ class CreateChampionsTable extends Migration
     {
         Schema::create('champions', function (Blueprint $table) {
             $table->bigInteger('key')->primary()->unsigned();
-            $table->string('id');
+            $table->string('id_name');
             $table->string('name');
             $table->string('image');
             $table->string('version');

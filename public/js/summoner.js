@@ -120,9 +120,6 @@ __webpack_require__.r(__webpack_exports__);
     league: Object,
     image: String
   },
-  mounted: function mounted() {
-    console.log(this.league);
-  },
   computed: {
     leagueName: function leagueName() {
       var solo = 'Solitario';
@@ -26928,14 +26925,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_TopCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/TopCard.vue */ "./resources/js/components/TopCard.vue");
 __webpack_require__(/*! ./app */ "./resources/js/app.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); // Vue.component('top-card', require('./components/TopCard.vue'));
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
-// Vue.component("./components/ExampleComponent.vue", MyComponent)
-
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.component('top-card', _components_TopCard_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  methods: {
+    updateSummoner: function updateSummoner() {
+      var form = document.getElementById('updateSummoner');
+      form.submit();
+    }
+  }
 });
 
 /***/ }),

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@home')->name('searcher');
 Route::get('/summoner/{name}', 'HomeController@getSummonerInfo')->name('summInfo');
+Route::post('/update/{name}', 'HomeController@updateSummoner')->name('summUpdate');
 
 
 Route::get('/getChampions', 'ImporterController@getChampions');

@@ -41,6 +41,24 @@
 }
 
 .card {
-  min-height: 220px;
+  min-height: 228px;
+}
+
+.refresh {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}
+
+.button-refresh {
+  border-radius: 6%;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 

@@ -16,7 +16,7 @@ class CreateLeaguesTable extends Migration
         Schema::create('leagues', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('summoner_id')->unsigned();
-            $table->foreign('summoner_id')->references('id')->on('summoners');
+            $table->foreign('summoner_id')->references('id')->on('summoners')->onDelete('cascade');;
             $table->string('leagueId');
             $table->string('queueType');
             $table->string('tier');
