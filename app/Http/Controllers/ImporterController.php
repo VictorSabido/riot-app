@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Exception;
 use App\Models\Champion;
+use Illuminate\Support\Facades\Storage;
 
 class ImporterController extends Controller
 {
@@ -34,4 +34,24 @@ class ImporterController extends Controller
             throw new Exception('Unexpected response code ('.$championRequest->getStatusCode().'). Checkout https://developer.riotgames.com/docs/lol#data-dragon_champions');
         }
     }
+
+
+    public function getChampionsImage() {
+
+        $champions = Champion::get();
+        $url = 'http://ddragon.leagueoflegends.com/cdn/10.10.3216176/img/champion/';
+        $folder = 'champions';
+        foreach($champions as $champ) 
+        {
+            $check = Storage::disk('public')->exists($folder.'/'.$champ->image);
+            if(!$check) {
+                $contents = file_get_contents($url.$champ->image);
+                Storage::disk('public')->put($folder.'/'.$champ->image, $contents);
+            }
+        }
+
+        return true;
+    }
+
+
 }
