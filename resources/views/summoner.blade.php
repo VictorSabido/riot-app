@@ -25,6 +25,9 @@
         <div class="row">
             <div class="col s12 m4 l4">
                 <div class="card blue-grey lighten-5">
+                    <div class="refresh">
+                        <a class="btn-floating button-refresh purple lighten-1"><i class="material-icons">refresh</i></a>
+                    </div>
                     <div class="card-content black-text">
                         <span class="card-title center"><strong>{{ $summ->name }}</strong></span>
                         <div class="center profile">
