@@ -112,13 +112,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     col: String,
-    league: String,
-    image: String,
-    level: String,
-    leaguePoints: String
+    league: Object,
+    image: String
   },
   mounted: function mounted() {
     console.log(this.league);
@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
       var flex = 'Flexible';
       var league = this.league;
 
-      if (league == 'RANKED_SOLO_5x5') {
+      if (this.league.queueType == 'RANKED_SOLO_5x5') {
         name = flex;
       } else {
         name = solo;
@@ -14656,19 +14656,34 @@ var render = function() {
           _c("u", [_vm._v(_vm._s(this.leagueName))]),
           _vm._v(" "),
           _c("strong", [
-            _vm._v(_vm._s(this.leaguePoints)),
+            _vm._v(_vm._s(this.league.leaguePoints)),
             _c("small", [_vm._v("PL")])
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "center profile" }, [
           _c("div", { staticClass: "profileIconDiv" }, [
-            _c("span", { staticClass: "level" }, [_vm._v(_vm._s(_vm.level))]),
+            _c("span", { staticClass: "level" }, [
+              _vm._v(_vm._s(this.league.rank))
+            ]),
             _vm._v(" "),
             _c("img", {
               staticClass: "profileIcon",
               attrs: { src: _vm.image, alt: "Profile Icon" }
             })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stats center" }, [
+          _c("span", [
+            _c("strong", [_vm._v("WR: " + _vm._s(this.league.winRatio) + "%")]),
+            _vm._v(
+              " (" +
+                _vm._s(this.league.wins) +
+                "V - " +
+                _vm._s(this.league.losses) +
+                "L)"
+            )
           ])
         ])
       ])

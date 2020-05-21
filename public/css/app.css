@@ -40,3 +40,7 @@
   padding-right: 2px;
 }
 
+.card {
+  min-height: 220px;
+}
+

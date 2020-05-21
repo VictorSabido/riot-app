@@ -4,9 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
     <title>Starter Template - Materialize</title>
-    <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
@@ -35,63 +33,21 @@
                                 <img src="{{ asset('storage/profile_icons/'.$summ->profileIconId.'.png') }}" alt="Profile Icon" class="profileIcon">
                             </div>
                         </div>
-                        <a class="waves-effect waves-light btn"><i class="material-icons right">cloud</i>button</a>
-
+                        <div class="masteries">
+                            masteries
+                        </div>
                     </div>
                 </div>
             </div>
             @foreach ($summ->leagues as $league)
-            {{-- {{ dd($league) }} --}}
                 <top-card
                     col="s12 m4 l4"
-                    league="{{ $league->queueType }}"
-                    level="{{ $league->rank }}"
+                    :league="{{ $league }}"
                     image="{{ asset('images/leagues/'.$league->tier.'_'.$league->rank.'.png') }}"
-                    league-points="{{ $league->leaguePoints }}"
                 ></top-card>
             @endforeach
-
-            {{-- <div class="col s12 m4 l4">
-                <div class="card blue-grey lighten-5">
-                    <div class="card-content black-text">
-                        <span class="card-title center"><strong>Ranked Solo</strong></span>
-                        <div class="profile">
-                            <div class="profileIconDiv">
-                                <span class="level">{{ $soloq->rank }}</span>
-                                <img src="{{ asset('images/leagues/'.$soloq->tier.'_'.$soloq->rank.'.png') }}" alt="Profile Icon" class="profileIcon">
-                            </div>
-                        </div>
-                        <p>{{ $soloq->leaguePoints }} LPs</p>
-                        <p>W {{ $soloq->wins }} / L {{ $soloq->losses }}</p>
-                        <p>WinRate {{ $soloqWinRatio }}%</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m4 l4">
-                <div class="card blue-grey lighten-5">
-                    <div class="card-content black-text">
-                        <span class="card-title center"><strong>Ranked Flex</strong></span>
-                        <div class="profile">
-                            <div class="profileIconDiv">
-                                <span class="level">{{ $flex->rank }}</span>
-                                <img src="{{ asset('images/leagues/'.$flex->tier.'_'.$flex->rank.'.png') }}" alt="Profile Icon" class="profileIcon">
-                            </div>
-                        </div>
-                        <div>
-                            <p>{{ $flex->leaguePoints }} LPs</p>
-                            <p>W {{ $flex->wins }} / L {{ $flex->losses }}</p>
-                            <p>WinRate {{ $flexWinRatio }}%</p>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
-</div>
-
-
-<div class="container">
-
 </div>
 
 <footer class="page-footer purple lighten-1">
@@ -128,8 +84,7 @@
     </div>
 </footer>
 
-  <!--  Scripts-->
-  <script src="{{ asset('js/summoner.js') }}"></script>
+<script src="{{ asset('js/summoner.js') }}"></script>
 
-  </body>
+</body>
 </html>

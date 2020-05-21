@@ -2,14 +2,16 @@
     <div :class="'col '+col">
         <div class="card blue-grey lighten-5">
             <div class="card-content black-text">
-                <span class="card-title center"><u>{{ this.leagueName }}</u> <strong>{{ this.leaguePoints }}<small>PL</small></strong></span>
+                <span class="card-title center"><u>{{ this.leagueName }}</u> <strong>{{ this.league.leaguePoints }}<small>PL</small></strong></span>
                 <div class="center profile">
                     <div class="profileIconDiv">
-                        <span class="level">{{ level }}</span>
+                        <span class="level">{{ this.league.rank }}</span>
                         <img :src="image" alt="Profile Icon" class="profileIcon">
                     </div>
                 </div>
-                
+                <div class="stats center">
+                    <span><strong>WR: {{this.league.winRatio}}%</strong> ({{ this.league.wins }}V - {{ this.league.losses }}L)</span>
+                </div>
             </div>
         </div>
     </div>
@@ -19,10 +21,8 @@
     export default {
         props: {
             col: String,
-            league: String,
-            image: String,
-            level: String,
-            leaguePoints: String,
+            league: Object,
+            image: String
         },
         mounted() {
             console.log(this.league)
@@ -33,7 +33,7 @@
                 let flex = 'Flexible'
                 let league = this.league;
 
-                if(league == 'RANKED_SOLO_5x5') {
+                if(this.league.queueType == 'RANKED_SOLO_5x5') {
                     name = flex
                 } else {
                     name = solo
