@@ -19,6 +19,9 @@
         <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
 </nav>
+<div id="navbar" class="center">
+    <span>Updated at {{ $summ->updated_at->format('H:i d/m/Y ') }}</span>
+</div>
 
 <div class="section no-pad-bot" id="app">
     <div class="container">
@@ -28,7 +31,7 @@
                     <div class="refresh" @click="updateSummoner">
                         <form id="updateSummoner" action="{{ route('summUpdate', $summ->name) }}" method="post">
                             @csrf
-                            <a class="btn-floating button-refresh purple lighten-1 noselect"><i class="material-icons">refresh</i></a>
+                            <a class="btn-floating button-refresh purple lighten-1 noselect"><i class="material-icons" ref="refresh">refresh</i></a>
                         </form>
                     </div>
                     <div class="card-content black-text">
@@ -39,9 +42,9 @@
                                 <img src="{{ asset('storage/profile_icons/'.$summ->profileIconId.'.png') }}" alt="Profile Icon" class="profileIcon">
                             </div>
                         </div>
-                        <div class="masteries center">
+                        <div class="center">
                             @for ($i = 0; $i < 6; $i++)
-                                <img src="{{ asset('storage/champions/'.$summ->masteries[$i]->getChampionImage()) }}" alt="" height="30px">
+                                <img src="{{ asset('storage/champions/'.$summ->masteries[$i]->getChampionImage()) }}" class="masteries tooltipped" data-position="bottom" data-tooltip="Lvl {{ $summ->masteries[$i]->championLevel }} <br>{{ number_format($summ->masteries[$i]->championPoints, 0, ',', '.') }}" alt="{{ $summ->masteries[$i]->getChampionImage() }}" >
                             @endfor
                         </div>
                     </div>
@@ -57,6 +60,7 @@
         </div>
     </div>
 </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 <footer class="page-footer purple lighten-1">
     <div class="container">
@@ -74,7 +78,9 @@
                 </ul>
             </div>
             <div class="col l3 s12">
-                <h5 class="white-text">Connect</h5>
+                <h5 class="white-text">Records
+
+                </h5>
                 <ul>
                     <li><a class="white-text" href="#!">Link 1</a></li>
                     <li><a class="white-text" href="#!">Link 2</a></li>
@@ -92,6 +98,5 @@
 </footer>
 
 <script src="{{ asset('js/summoner.js') }}"></script>
-
 </body>
 </html>

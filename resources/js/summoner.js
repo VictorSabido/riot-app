@@ -10,8 +10,29 @@ var app = new Vue({
     methods: {
         updateSummoner: function() {
             let form = document.getElementById('updateSummoner');
+            this.$refs.refresh.classList.add('loading-spinner');
             form.submit();
         },
     }
- });
+});
+
+// Sticky updateBar
+window.onscroll = function() {stickyBar()};
+    
+var navbar = document.getElementById("navbar");
+var sticky = navbar.offsetTop;
+
+function stickyBar() {
+    if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+    } else {
+    navbar.classList.remove("sticky");
+    }
+}
+
+// Toolti
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.tooltipped');
+    var instances = M.Tooltip.init(elems);
+  });
 

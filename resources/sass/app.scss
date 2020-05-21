@@ -52,3 +52,36 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.masteries {
+    border-radius: 10px;
+    height: 30px;
+}
+
+#navbar {
+    overflow: hidden;
+    background-color: #333;
+    z-index: 10;
+    color: white;
+  }
+
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  
+  .sticky + .content {
+    padding-top: 60px;
+  }
+
+
+.loading-spinner {
+animation: rotate 1.5s linear infinite;
+}
+  
+@keyframes rotate {
+to {
+    transform: rotate(360deg);
+}
+}
