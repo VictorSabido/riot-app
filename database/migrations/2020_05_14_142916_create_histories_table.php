@@ -15,8 +15,7 @@ class CreateHistoriesTable extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('summoner_id')->unsigned();
-            $table->foreign('summoner_id')->references('id')->on('summoners');
+            $table->string('summoner_id');
             $table->string('name');
             $table->timestamps();
         });

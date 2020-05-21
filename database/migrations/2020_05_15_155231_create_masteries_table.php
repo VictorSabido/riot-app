@@ -16,7 +16,7 @@ class CreateMasteriesTable extends Migration
         Schema::create('masteries', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('summoner_id')->unsigned();
-            $table->foreign('summoner_id')->references('id')->on('summoners');
+            $table->foreign('summoner_id')->references('id')->on('summoners')->onDelete('cascade');
             $table->bigInteger('champion_id')->unsigned();
             $table->foreign('champion_id')->references('key')->on('champions');
             $table->integer('championLevel');

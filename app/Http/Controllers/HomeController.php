@@ -108,7 +108,7 @@ class HomeController extends Controller
 
     private function saveInHistory($obj) {
         $history = new History;
-        $history->summoner_id = $obj->id;
+        $history->summoner_id = $obj->summId;
         $history->name        = $obj->name;
 
         $history->save();
