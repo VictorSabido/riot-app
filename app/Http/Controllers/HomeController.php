@@ -42,8 +42,11 @@ class HomeController extends Controller
 
         $this->checkIconId($summoner->profileIconId);
 
+        $history = History::orderBy('created_at', 'desc')->take(4)->get();
+
         return view('summoner', [
             'summ' => $summoner,
+            'history' => $history
         ]);
     }
 

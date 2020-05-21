@@ -9,7 +9,7 @@
 </head>
 <body>
 <nav class="purple lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">League of legends</a>
         <ul class="right hide-on-med-and-down">
             <li><a href="{{ route('searcher') }}">Volver atrás</a></li>
         </ul>
@@ -35,7 +35,7 @@
                         <span class="card-title center"><strong>{{ $summ->name }}</strong></span>
                         <div class="center profile">
                             <div class="profileIconDiv">
-                                <span class="level">150</span>
+                                <span class="level">{{ $summ->summonerLevel }}</span>
                                 <img src="{{ asset('storage/profile_icons/'.$summ->profileIconId.'.png') }}" alt="Profile Icon" class="profileIcon">
                             </div>
                         </div>
@@ -66,12 +66,11 @@
                 <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
             </div>
             <div class="col l3 s12">
-                <h5 class="white-text">Settings</h5>
+                <h5 class="white-text">Últimos buscados</h5>
                 <ul>
-                    <li><a class="white-text" href="#!">Link 1</a></li>
-                    <li><a class="white-text" href="#!">Link 2</a></li>
-                    <li><a class="white-text" href="#!">Link 3</a></li>
-                    <li><a class="white-text" href="#!">Link 4</a></li>
+                    @foreach ($history as $h)
+                        <li><a class="white-text" href="{{ route('summInfo', $h->name) }}">{{ $h->name }}</a></li>
+                    @endforeach
                 </ul>
             </div>
             <div class="col l3 s12">
