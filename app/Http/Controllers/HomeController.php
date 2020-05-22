@@ -12,11 +12,10 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
-    private $key;
-    private $guzzOptions = ['http_errors' => false];
-
     public function __construct() {
-        $this->key = env('RIOT_KEY');
+        $this->key = $this->getApiKey();
+        $this->guzzOptions = $this->getGuzzleOptions();
+        dd($this->key, $this->guzzOptions);
     }
 
     public function home() {
