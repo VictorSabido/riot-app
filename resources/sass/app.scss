@@ -2,8 +2,8 @@
 @import '~materialize-css/dist/css/materialize.min.css';
 
 .profile{
-    width: 50%;
-    margin: 0 auto;
+    // width: 50%;
+    // margin: 0 auto;
 
     .profileIconDiv {
         position: relative;
@@ -81,7 +81,7 @@ animation: rotate 1.5s linear infinite;
 }
   
 @keyframes rotate {
-to {
-    transform: rotate(360deg);
-}
+    to {
+        transform: rotate(360deg);
+    }
 }

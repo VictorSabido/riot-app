@@ -58,9 +58,42 @@
                 ></top-card>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h4 class="center">Historial</h4>
+                <hr>
+            </div>
+            @foreach ($matchs as $match)
+                <div class="col s12 m12 l12">
+                    <div class="card blue-grey {{ $match['bgColor'] }}">
+                        <div class="card-content black-text">
+                            <div class="row">
+                                <div class="col s8 m8 l8">
+                                    <div class="profile">
+                                        <div class="profileIconDiv">
+                                            <span class="level">{{ $summ->summonerLevel }}</span>
+                                            <img src="{{ asset('storage/champions/'.$match['champion']) }}" alt="Profile Icon" class="profileIcon">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="card-title center"><strong>Duración: {{ $match['gameDuration'] }}</strong></span>
+                            
+                            <div class="center">
+                                    @foreach ($match['teams'] as $team)
+                                        @foreach ($team as $participant)
+                                            <img src="{{ asset('storage/champions/'.$participant['championImage']) }}" class="masteries tooltipped" data-position="bottom" data-tooltip="" alt="" >
+                                        @endforeach
+                                    @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 <footer class="page-footer purple lighten-1">
     <div class="container">

@@ -15,16 +15,11 @@ class HomeController extends Controller
     public function __construct() {
         $this->key = $this->getApiKey();
         $this->guzzOptions = $this->getGuzzleOptions();
-        dd($this->key, $this->guzzOptions);
     }
 
     public function home() {
-        return view('home');
-    }
 
-    public function updateSummoner($name) {
-        $this->getSummoner($name);
-        return redirect()->back();
+        return view('home');
     }
 
     public function getSummonerInfo($name) {
@@ -32,7 +27,7 @@ class HomeController extends Controller
 
         $summoner = Summoner::with(['leagues', 'getMasteries'])->where('name',  $name)->first();
 
-        $order = ['RANKED_FLEX_SR', 'RANKED_SOLO_5x5'];
+        $order = ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'];
         $summoner->leagues = $summoner->leagues->sort(function ($a, $b) use ($order) {
             $pos_a = array_search($a->queueType, $order);
             $pos_b = array_search($b->queueType, $order);
@@ -43,10 +38,30 @@ class HomeController extends Controller
 
         $history = History::orderBy('created_at', 'desc')->take(4)->get();
 
+        $matchs = app('App\Http\Controllers\MatchController')->getMatchsHistory($summoner->accountId);
+// dd($matchs);
         return view('summoner', [
-            'summ' => $summoner,
-            'history' => $history
+            'summ'    => $summoner,
+            'history' => $history,
+            'matchs'  => $matchs
         ]);
+    }
+
+    public function updateSummoner($name) {
+        $this->updateSummonerData($name);
+
+        return redirect()->back();
+    }
+
+    public function updateSummonerData($name) {
+        $summonerInfo    = $this->getSummoner($name);
+        $summonerUpdated = $this->saveSummoner($summonerInfo);
+
+        $leagueInfo = $this->getLeagues($summonerUpdated);
+        $this->saveLeagues($leagueInfo,$summonerUpdated);
+
+        $masteries = $this->getMasteries($summonerUpdated);
+        $this->saveMasteries($masteries, $summonerUpdated);
     }
 
     private function checkIconId($imgName) {
@@ -65,6 +80,7 @@ class HomeController extends Controller
     }
 
     private function checkSummonerDatabase($name) {
+        //CHECK IF SUMMONER HAVE MASTERIES LEAGUES
         $summoner = Summoner::where('name', $name)->first();
         if($summoner == null) {
             $this->getSummoner($name);
@@ -72,7 +88,7 @@ class HomeController extends Controller
     }
 
 
-    private function getSummoner($name) {
+    public function getSummoner($name) {
         $client = new \GuzzleHttp\Client();
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'.$name.'?api_key='.$this->key, $this->guzzOptions);
 
@@ -81,11 +97,12 @@ class HomeController extends Controller
         }
 
         $summRequest = json_decode($summRequest->getBody()->getContents());
-        $this->saveSummoner($summRequest);
+
+        return $summRequest;
     }
 
 
-    private function saveSummoner($summRequest) {
+    public function saveSummoner($summRequest) {
         $summoner= Summoner::updateOrCreate(
             ['accountId' => $summRequest->accountId],
             [
@@ -100,23 +117,26 @@ class HomeController extends Controller
             ]
         );
 
-        $this->saveInHistory($summoner);
-        $this->getAndSaveLeagues($summoner);
-        $this->getAndSaveMasteries($summoner);
+        return $summoner;
     }
 
-    private function saveInHistory($obj) {
+    private function saveInHistory($summoner) {
         $history = new History;
-        $history->summoner_id = $obj->summId;
-        $history->name        = $obj->name;
+        $history->summoner_id = $summoner->summId;
+        $history->name        = $summoner->name;
 
         $history->save();
     }
 
-    private function getAndSaveLeagues($summoner) {
+    private function getLeagues($summoner) {
         $client = new \GuzzleHttp\Client();
         $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/'.$summoner->summId.'?api_key='.$this->key);
         $leagueInfo    = json_decode($leagueRequest->getBody()->getContents());
+
+        return $leagueInfo;
+    }
+
+    private function saveLeagues($leagueInfo, $summoner) {
 
         foreach($leagueInfo as $rank) {
             $winRatio  = round(($rank->wins / ($rank->wins + $rank->losses)) * 100);
@@ -142,13 +162,17 @@ class HomeController extends Controller
         }
     }
 
-    private function getAndSaveMasteries($summoner) {
+    private function getMasteries($summoner) {
         $this->checkChampions();
 
         $client = new \GuzzleHttp\Client();
         $masteryRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/'.$summoner->summId.'?api_key='.$this->key);
         $masteryInfo    = json_decode($masteryRequest->getBody()->getContents());
 
+        return $masteryInfo;
+    }
+
+    private function saveMasteries($masteryInfo, $summoner) {
         foreach($masteryInfo as $mastery) {
             Mastery::updateOrCreate(
                 ['summoner_id' => $summoner->id, 'champion_id' => $mastery->championId],
