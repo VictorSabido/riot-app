@@ -85,3 +85,43 @@ animation: rotate 1.5s linear infinite;
         transform: rotate(360deg);
     }
 }
+
+.history {
+    min-height: unset;
+}
+
+.champions {
+    column-count: 2;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    width: 100%;
+
+    .champion {
+        display: inline-block;
+        width: 100%;
+    }
+
+    img {
+        // vertical-align:middle;
+        height: 20px;
+        border-radius: unset;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover {
+        color: white;
+        transition: 0.2s;
+    }
+
+    .summonerName {
+        width: 108px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+}

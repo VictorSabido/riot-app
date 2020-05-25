@@ -23,6 +23,7 @@ class HomeController extends Controller
     }
 
     public function getSummonerInfo($name) {
+
         $this->checkSummonerDatabase($name);
 
         $summoner = Summoner::with(['leagues', 'getMasteries'])->where('name',  $name)->first();
@@ -39,7 +40,7 @@ class HomeController extends Controller
         $history = History::orderBy('created_at', 'desc')->take(4)->get();
 
         $matchs = app('App\Http\Controllers\MatchController')->getMatchsHistory($summoner->accountId);
-// dd($matchs);
+
         return view('summoner', [
             'summ'    => $summoner,
             'history' => $history,
@@ -80,10 +81,11 @@ class HomeController extends Controller
     }
 
     private function checkSummonerDatabase($name) {
-        //CHECK IF SUMMONER HAVE MASTERIES LEAGUES
-        $summoner = Summoner::where('name', $name)->first();
+        $summoner = Summoner::with(['leagues', 'getMasteries'])->where('name', $name)->first();
         if($summoner == null) {
-            $this->getSummoner($name);
+            $this->updateSummonerData($name);
+        } else if((count($summoner->leagues) > 0) && (count($summoner->getMasteries) > 0)) {
+            $this->updateSummonerData($name);
         }
     }
 

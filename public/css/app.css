@@ -96,3 +96,42 @@
   }
 }
 
+.history {
+  min-height: unset;
+}
+
+.champions {
+  column-count: 2;
+  -moz-column-count: 2;
+  -webkit-column-count: 2;
+  width: 100%;
+}
+
+.champions .champion {
+  display: inline-block;
+  width: 100%;
+}
+
+.champions img {
+  height: 20px;
+  border-radius: unset;
+}
+
+.champions a {
+  text-decoration: none;
+  color: black;
+}
+
+.champions a:hover {
+  color: white;
+  transition: 0.2s;
+}
+
+.champions .summonerName {
+  width: 108px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+

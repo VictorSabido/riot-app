@@ -18,19 +18,19 @@ class MatchController extends Controller
         $summRequest = json_decode($summRequest->getBody()->getContents());
 
         $infoMatch = [];
-        $totalMatch = 10;
+        $totalMatch = 5;
         for ($i=0; $i < $totalMatch; $i++) { 
-        $gameId = $summRequest->matches[$i++]->gameId;
-        
-        $matchRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matches/'.$gameId.'?api_key='.$this->key, $this->guzzOptions);
-        $match = json_decode($matchRequest->getBody()->getContents());
+            $gameId = $summRequest->matches[$i]->gameId;
+            
+            $matchRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matches/'.$gameId.'?api_key='.$this->key, $this->guzzOptions);
+            $match = json_decode($matchRequest->getBody()->getContents());
 
-            foreach($match->teams as $team) {
-                if($team->win == 'Win') {
-                    $infoMatch[$match->gameId]['teamWinner'] = $team->teamId;
+                foreach($match->teams as $team) {
+                    if($team->win == 'Win') {
+                        $infoMatch[$match->gameId]['teamWinner'] = $team->teamId;
+                    }
                 }
-            }
-    
+        
             foreach($match->participants as $participant) {
                 $participantId = $participant->participantId;
                 foreach($match->participantIdentities as $participantDeails) 
@@ -49,30 +49,32 @@ class MatchController extends Controller
                             }
 
                             $infoMatch[$match->gameId]['champion'] = Champion::where('key', $participant->championId)->first()->image;
+                            $infoMatch[$match->gameId]['stats'] = [
+                                'kills' => $participant->stats->kills,
+                                'deaths' => $participant->stats->deaths,
+                                'assists' => $participant->stats->assists,
+                                'champLevel' => $participant->stats->champLevel,
+                            ];
                         }
-                        
                     }
                 }
-    
+
+                $champ = Champion::where('key', $participant->championId)->first();
                 $infoMatch[$match->gameId]['teams'][$participant->teamId][] = [
-                    'participantId' => $participantId,
-                    'summonerName' => $summonerName,
-                    'requestedSummoner' => ($encryptedAccountId == $requestedSummoner) ? true : false,
-                    'championId' => $participant->championId,
-                    'championImage' => Champion::where('key', $participant->championId)->first()->image,
-                    'stats' => [
-                        'kills' => $participant->stats->kills,
-                        'deaths' => $participant->stats->deaths,
-                        'assists' => $participant->stats->assists,
-                    ]
-                ];
+                        'participantId' => $participantId,
+                        'summonerName' => $summonerName,
+                        'requestedSummoner' => ($encryptedAccountId == $requestedSummoner) ? true : false,
+                        'championId' => $participant->championId,
+                        'championImage' => $champ->image,
+                        'championName' => $champ->name,
+                    ];
             }
     
             $infoMatch[$match->gameId]['gameDuration'] = $this->conversorSegundosHoras($match->gameDuration);
+            // dd($match);
         }
-        
 
-        // dd($encryptedAccountId,$match,$infoMatch);
+        // dd($encryptedAccountId,$summRequest,$infoMatch);
         return $infoMatch;
     }
 
