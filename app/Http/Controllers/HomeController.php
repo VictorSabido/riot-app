@@ -17,11 +17,22 @@ class HomeController extends Controller
         $this->guzzOptions = $this->getGuzzleOptions();
     }
 
+    /**
+     * Return to searcher
+     *
+     * @return View
+     */
     public function home() {
 
         return view('home');
     }
 
+    /**
+     * UShow the summoner's summary collecting the data by name
+     *
+     * @param [String] $name
+     * @return View
+     */
     public function getSummonerInfo($name) {
 
         $this->checkSummonerDatabase($name);
@@ -40,7 +51,7 @@ class HomeController extends Controller
         $history = History::orderBy('created_at', 'desc')->take(4)->get();
 
         $matchs = app('App\Http\Controllers\MatchController')->getMatchsHistory($summoner->accountId);
-
+        
         return view('summoner', [
             'summ'    => $summoner,
             'history' => $history,
@@ -48,12 +59,24 @@ class HomeController extends Controller
         ]);
     }
 
+    /**
+     * Function that updates the summoner data and returns you to the view
+     *
+     * @param [String] $name
+     * @return void
+     */
     public function updateSummoner($name) {
         $this->updateSummonerData($name);
 
         return redirect()->back();
     }
 
+    /**
+     * Updates all grouped data of the summoner
+     *
+     * @param [String] $name
+     * @return void
+     */
     public function updateSummonerData($name) {
         $summonerInfo    = $this->getSummoner($name);
         $summonerUpdated = $this->saveSummoner($summonerInfo);
@@ -65,6 +88,12 @@ class HomeController extends Controller
         $this->saveMasteries($masteries, $summonerUpdated);
     }
 
+    /**
+     * Look for the summoner icon and if it can't find it, download
+     *
+     * @param [String] $imgName
+     * @return void
+     */
     private function checkIconId($imgName) {
         $folder = 'profile_icons';
         $check = Storage::disk('public')->exists($folder.'/'.$imgName.'.png');
@@ -80,16 +109,33 @@ class HomeController extends Controller
         return $imgName;
     }
 
+    /**
+     * Check if the invoker exists if it is not saved and if it is old update it
+     *
+     * @param [String] $name
+     * @return void
+     */
     private function checkSummonerDatabase($name) {
         $summoner = Summoner::with(['leagues', 'getMasteries'])->where('name', $name)->first();
         if($summoner == null) {
             $this->updateSummonerData($name);
         } else if((count($summoner->leagues) > 0) && (count($summoner->getMasteries) > 0)) {
-            $this->updateSummonerData($name);
+            $now = Carbon::now();
+            $updated_at = $summoner->updated_at;
+            $diff = ($updated_at->diffInHours($now, true));
+
+            if($diff > 2) {
+                $this->updateSummonerData($name);
+            }
         }
     }
 
-
+    /**
+     * Get summoner information
+     *
+     * @param [type] $name
+     * @return void
+     */
     public function getSummoner($name) {
         $client = new \GuzzleHttp\Client();
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'.$name.'?api_key='.$this->key, $this->guzzOptions);
@@ -103,7 +149,12 @@ class HomeController extends Controller
         return $summRequest;
     }
 
-
+    /**
+     * Set summoner's information in database
+     *
+     * @param [Obj] $summRequest
+     * @return void
+     */
     public function saveSummoner($summRequest) {
         $summoner= Summoner::updateOrCreate(
             ['accountId' => $summRequest->accountId],
@@ -122,6 +173,12 @@ class HomeController extends Controller
         return $summoner;
     }
 
+    /**
+     * Save summoner in history 
+     *
+     * @param [Obj] $summoner
+     * @return void
+     */
     private function saveInHistory($summoner) {
         $history = new History;
         $history->summoner_id = $summoner->summId;
@@ -130,6 +187,12 @@ class HomeController extends Controller
         $history->save();
     }
 
+    /**
+     * Get the summoner's rank and leagues
+     *
+     * @param [Obj] $summoner
+     * @return void
+     */
     private function getLeagues($summoner) {
         $client = new \GuzzleHttp\Client();
         $leagueRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/'.$summoner->summId.'?api_key='.$this->key);
@@ -138,6 +201,13 @@ class HomeController extends Controller
         return $leagueInfo;
     }
 
+    /**
+     * Set summoner league in database in database
+     *
+     * @param [Obj] $leagueInfo
+     * @param [Obj] $summoner
+     * @return void
+     */
     private function saveLeagues($leagueInfo, $summoner) {
 
         foreach($leagueInfo as $rank) {
@@ -164,6 +234,12 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * Get the summoner's masteries
+     *
+     * @param [Obj] $summoner
+     * @return void
+     */
     private function getMasteries($summoner) {
         $this->checkChampions();
 
@@ -174,6 +250,13 @@ class HomeController extends Controller
         return $masteryInfo;
     }
 
+    /**
+     * Set summoner's masteries in database
+     *
+     * @param [type] $masteryInfo
+     * @param [type] $summoner
+     * @return void
+     */
     private function saveMasteries($masteryInfo, $summoner) {
         foreach($masteryInfo as $mastery) {
             Mastery::updateOrCreate(
@@ -193,6 +276,11 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * Check if the champions exist in the database
+     *
+     * @return void
+     */
     private function checkChampions() {
         $champions = Champion::first();
         if($champions == null) {

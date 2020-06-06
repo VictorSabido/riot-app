@@ -12,6 +12,12 @@ class MatchController extends Controller
         $this->guzzOptions = $this->getGuzzleOptions();
     }
 
+    /**
+     * Get matchs history
+     *
+     * @param [String] $encryptedAccountId
+     * @return void
+     */
     public function getMatchsHistory($encryptedAccountId) {
         $client = new \GuzzleHttp\Client();
         $summRequest = $client->request('GET', 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/'.$encryptedAccountId.'?api_key='.$this->key, $this->guzzOptions);
@@ -70,7 +76,7 @@ class MatchController extends Controller
                     ];
             }
     
-            $infoMatch[$match->gameId]['gameDuration'] = $this->conversorSegundosHoras($match->gameDuration);
+            $infoMatch[$match->gameId]['gameDuration'] = $this->conversionSecondsHours($match->gameDuration);
             // dd($match);
         }
 
@@ -78,22 +84,28 @@ class MatchController extends Controller
         return $infoMatch;
     }
 
-    function conversorSegundosHoras($tiempo_en_segundos) {
-        $horas = floor($tiempo_en_segundos / 3600);
-        $minutos = floor(($tiempo_en_segundos - ($horas * 3600)) / 60);
-        $segundos = $tiempo_en_segundos - ($horas * 3600) - ($minutos * 60);
+    /**
+     * Time elapsed since the match
+     *
+     * @param [Int] $seconds
+     * @return void
+     */
+    function conversionSecondsHours($seconds) {
+        $hours = floor($seconds / 3600);
+        $min = floor(($seconds - ($hours * 3600)) / 60);
+        $secs = $seconds - ($hours * 3600) - ($min * 60);
     
         $hora_texto = "";
-        if ($horas > 0 ) {
-            $hora_texto .= $horas . "h ";
+        if ($hours > 0 ) {
+            $hora_texto .= $hours . "h ";
         }
     
-        if ($minutos > 0 ) {
-            $hora_texto .= $minutos . "m ";
+        if ($min > 0 ) {
+            $hora_texto .= $min . "m ";
         }
     
-        if ($segundos > 0 ) {
-            $hora_texto .= $segundos . "s";
+        if ($secs > 0 ) {
+            $hora_texto .= $secs . "s";
         }
     
         return $hora_texto;

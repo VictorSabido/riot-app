@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ImporterController extends Controller
 {
+    /**
+     * Get the current champions by url
+     *
+     * @return void
+     */
     public function getChampions() {
         $client = new \GuzzleHttp\Client();
         $championRequest = $client->request('GET', 'http://ddragon.leagueoflegends.com/cdn/10.9.1/data/en_US/champion.json');
@@ -35,7 +40,11 @@ class ImporterController extends Controller
         }
     }
 
-
+    /**
+     * Get the current image champions by url
+     *
+     * @return void
+     */
     public function getChampionsImage() {
         $champions = Champion::get();
         $url = 'http://ddragon.leagueoflegends.com/cdn/10.10.3216176/img/champion/';
