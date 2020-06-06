@@ -68,17 +68,26 @@
                     <div class="card blue-grey history {{ $match['bgColor'] }}">
                         <div class="card-content black-text">
                             <div class="row">
-                                <div class="col s8 m8 l8">
-                                    <div class="profile">
+                                <div class="col s4 m4 l4">
+                                    <div class="profile prof-history">
                                         <div class="profileIconDiv">
                                             <span class="level">{{ $match['stats']['champLevel'] }}</span>
                                             <img src="{{ asset('storage/champions/'.$match['champion']) }}" alt="{{ $match['champion'] }}" class="profileIcon">
                                         </div>
                                         <span class="center"><strong>{{ $match['gameDuration'] }}</strong></span>
                                     </div>
-                                    {{-- <span class="card-title center"><strong>Duración: {{ $match['gameDuration'] }}</strong></span> --}}
                                 </div>
-                                <div class="col s4 m4 l4">
+                                <div class="col s3 m3 l3">
+                                    <div>
+                                        <p class="center">KDA</p>
+                                        <p class="center">
+                                            <strong>{{ $match['stats']['kills'] }}</strong> / 
+                                            <span>{{ $match['stats']['deaths'] }}</span> / 
+                                            <span>{{ $match['stats']['assists'] }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col s5 m5 l5">
                                     <div class="champions">
                                         @foreach ($match['teams'] as $team)
                                             @foreach ($team as $participant)

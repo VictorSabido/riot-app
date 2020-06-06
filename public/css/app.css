@@ -100,6 +100,10 @@
   min-height: unset;
 }
 
+.history .prof-history {
+  display: inline-grid;
+}
+
 .champions {
   column-count: 2;
   -moz-column-count: 2;
@@ -133,5 +137,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+}
+
+@media only screen and (max-width: 600px) {
+  .champions .summonerName {
+    display: none;
+  }
 }
 

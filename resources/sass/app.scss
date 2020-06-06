@@ -2,8 +2,6 @@
 @import '~materialize-css/dist/css/materialize.min.css';
 
 .profile{
-    // width: 50%;
-    // margin: 0 auto;
 
     .profileIconDiv {
         position: relative;
@@ -88,6 +86,10 @@ animation: rotate 1.5s linear infinite;
 
 .history {
     min-height: unset;
+
+    .prof-history {
+        display: inline-grid;
+    }
 }
 
 .champions {
@@ -123,5 +125,11 @@ animation: rotate 1.5s linear infinite;
         overflow: hidden;
         text-overflow: ellipsis;
         display: inline-block;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .summonerName {
+            display: none;
+        }
     }
 }
